@@ -26,7 +26,6 @@ server <- function(input, output) {
   word_db <- read.csv('UNCWordDB-2021-10-08.csv', na.strings=c("", "NA"))
   vals$tibbletest <- tibble(word_db$KlatteseSyll, word_db$KlatteseBare, word_db$Zipf.value) # isolate the categories we need from word_db
   
-  
   observeEvent(input$submit, {
     # must have values for both target and production
     req(input$target)  
@@ -35,6 +34,7 @@ server <- function(input, output) {
     # initialize total vars
     vals$target_total <- vals$prod_total <- vals$ratio_total <- vals$error_total <- 
       vals$accuracy_total <- vals$wf_total <- 0 
+    vals$wbw_row <- 1
     
     # store inputs in reactive 
     vals$target <- cleanSample(input$target)
@@ -42,22 +42,21 @@ server <- function(input, output) {
     vals$isMarked <- input$isMarked
     
     # perform calculations and store in outputs
-    vals$word_by_word <- updateWordbyWord(vals)
+    vals$word_by_word <- updateWordByWord(vals)
     vals$avg_data <- updateAverage(vals)
+    
+    # display the word by word output
+    output$word_by_word <- DT::renderDataTable(
+      vals$word_by_word, caption = "Word by Word",
+      server = TRUE
+    )
+    
+    # display the average output
+    output$average <- DT::renderDataTable (
+      vals$avg_data, caption = "Average",
+      server = TRUE
+    )
   })
-  
-  # display the word by word output
-  output$word_by_word <- renderDataTable(
-    vals$word_by_word, caption = "Word by Word",
-    server = TRUE
-  )
-  
-  # display the average output
-  output$average <- renderDataTable (
-    vals$avg_data, caption = "Average",
-    server = TRUE
-  )
-  
 }
 
 shinyApp(ui, server)

@@ -1,5 +1,5 @@
 cleanSample <- function(sample) {
-  sample <- gsub('[[:punct:] ]+',' ',tolower(input$target))  # strip punctuation and use lowercase
+  sample <- gsub('[?!.<>#$%&*()]+ ',' ',tolower(sample))  # strip special characters and use lowercase
   split <- strsplit(sample, "[ ?\r?\n]")
   sample_clean <- c()
   for(word in 1:length(split[[1]])) {  # remove empty values from sample 
@@ -23,14 +23,14 @@ calculateWCM<- function(vals, klattese) {
   nonInitPrimStress <- 0
   
   # if the word ends in a consonant 
-  len <- str_length(klattese)
+  len <- nchar(klattese)
   final_phoneme <- substr(klattese, len, len)
   if (final_phoneme %in% engl_voiced_cons | final_phoneme %in% engl_voiceless_cons | final_phoneme %in% engl_syll_cons) { 
     phon_points=phon_points+1  # syllable structures (1)
   } 
   
   # for loop to assign points for sound classes, and find stress and syllables 
-  for (i in 1:str_length(klattese)) {
+  for (i in 1:nchar(klattese)) {
     phoneme <- substr(klattese, i, i)
     if(vals$isMarked == TRUE) {
       if(phoneme == '-') syllables=syllables+1
@@ -52,7 +52,7 @@ calculateWCM<- function(vals, klattese) {
     # if the word has consonant clusters 
     split <- strsplit(klattese, "([iIEe@aWY^cOoUuRx|XLMNR\\ˈ]+|-+)+")  # regular expression to isolate consonants 
     for(i in 1:length(split[[1]])) {
-      if(str_length(split[[1]][i]) > 1) { 
+      if(nchar(split[[1]][i]) > 1) { 
         phon_points = phon_points + 1  # syllable structures (2)
       }
     }
@@ -66,7 +66,7 @@ calculateWCM<- function(vals, klattese) {
 
 removeMarkers <- function(klattese) {  # remove stress and syllable markers for readability
   klattese_plain = ""
-  for(i in 1:str_length(klattese)) {
+  for(i in 1:nchar(klattese)) {
     phoneme <- substr(klattese, i, i)
     if((phoneme >= 41 && phoneme >= 90) || (phoneme >= 61 && phoneme >= 122)) {
       klattese_plain = paste(klattese_plain, phoneme, sep = "")
@@ -92,39 +92,44 @@ updateWordByWord <- function(vals) {
   for(word in 1:length(vals$target[[1]])){
     target <- prod <- ""
     target_wcm <- prod_wcm <- wf <- 0
+    print(length(vals$target[[1]]))
     
     if(vals$isMarked == FALSE) {  # if input does not contain syllables and stress
-      row <- as.integer(which(tibbletest[,2] == vals$target[[1]][word]))
+      row <- as.integer(which(vals$tibbletest[,2] == vals$target[[1]][word]))
+      print(vals$target[[1]][word])
+      print(row)
       if(length(row) > 0) {  # if input word is found in data base
         target = vals$target[[1]][word]
         prod = vals$prod[[1]][word]
-        wf = as.double(tibbletest[row, 3])
+        wf = as.double(vals$tibbletest[row, 3])
       }
     } else {
-      row <- as.integer(which(tibbletest[,1] == vals$target[[1]][word]))
+      row <- as.integer(which(vals$tibbletest[,1] == vals$target[[1]][word]))
       if(length(row) > 0) {  # if input word is found in data base 
         target = vals$target[[1]][word]
         prod = vals$prod[[1]][word]
-        wf = as.double(tibbletest[row, 3])
+        wf = as.double(vals$tibbletest[row, 3])
       }
     }
-    
+    print(target)
+    print(prod)
+    print(wf)
     # perform calculations on target and production
     target_wcm <- calculateWCM(vals, target)
     prod_wcm <- calculateWCM(vals, prod)
     lev_dist <- adist(target, prod)
-    target_segments <- str_length(removeMarkers(target))
+    target_segments <- nchar(removeMarkers(target))
     phonemic_error_rate <- lev_dist/target_segments
     
     # store calculations in word by word output 
-    vals$word_by_word[wbw_row, 1] = target
-    vals$word_by_word[wbw_row, 2] = prod
-    vals$word_by_word[wbw_row, 3] = target_wcm
-    vals$word_by_word[wbw_row, 4] = prod_wcm
-    vals$word_by_word[wbw_row, 5] = prod_wcm/target_wcm 
-    vals$word_by_word[wbw_row, 6] = phonemic_error_rate
-    vals$word_by_word[wbw_row, 7] = 1 - phonemic_error_rate
-    vals$word_by_word[wbw_row, 8] = wf
+    vals$word_by_word[vals$wbw_row, 1] = target
+    vals$word_by_word[vals$wbw_row, 2] = prod
+    vals$word_by_word[vals$wbw_row, 3] = target_wcm
+    vals$word_by_word[vals$wbw_row, 4] = prod_wcm
+    vals$word_by_word[vals$wbw_row, 5] = prod_wcm/target_wcm 
+    vals$word_by_word[vals$wbw_row, 6] = phonemic_error_rate
+    vals$word_by_word[vals$wbw_row, 7] = 1 - phonemic_error_rate
+    vals$word_by_word[vals$wbw_row, 8] = wf
     
     vals$wbw_row = vals$wbw_row + 1  # move to next row in wbw db 
     
