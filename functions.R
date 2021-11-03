@@ -1,5 +1,5 @@
 cleanSample <- function(sample) {
-  sample <- gsub('[?!.<>#$%&*()]+ ',' ',tolower(sample))  # strip special characters and use lowercase
+  sample <- gsub('[?!.<>#$%&*()] ',' ',tolower(sample))  # strip special characters and use lowercase
   split <- strsplit(sample, "[ ?\r?\n]")
   sample_clean <- c()
   for(word in 1:length(split[[1]])) {  # remove empty values from sample 
@@ -95,7 +95,6 @@ updateWordByWord <- function(vals) {
     
     if(vals$isMarked == FALSE) {  # if input does not contain syllables and stress
       row <- as.integer(which(vals$tibbletest[,2] == vals$target[word]))
-      print(vals$target[word])
       if(length(row) > 0) {  # if input word is found in data base
         target = vals$target[word]
         prod = vals$prod[word]
@@ -109,6 +108,7 @@ updateWordByWord <- function(vals) {
         wf = as.double(vals$tibbletest[row, 3])
       }
     }
+    print("successful retrieval")
     # perform calculations on target and production
     target_wcm <- calculateWCM(vals, target)
     prod_wcm <- calculateWCM(vals, prod)
