@@ -89,31 +89,26 @@ updateWordByWord <- function(vals) {
     Word_Frequency = NA
   )  
   
-  for(word in 1:length(vals$target[[1]])){
+  for(word in 1:length(vals$target)){
     target <- prod <- ""
     target_wcm <- prod_wcm <- wf <- 0
-    print(length(vals$target[[1]]))
     
     if(vals$isMarked == FALSE) {  # if input does not contain syllables and stress
-      row <- as.integer(which(vals$tibbletest[,2] == vals$target[[1]][word]))
-      print(vals$target[[1]][word])
-      print(row)
+      row <- as.integer(which(vals$tibbletest[,2] == vals$target[word]))
+      print(vals$target[word])
       if(length(row) > 0) {  # if input word is found in data base
-        target = vals$target[[1]][word]
-        prod = vals$prod[[1]][word]
+        target = vals$target[word]
+        prod = vals$prod[word]
         wf = as.double(vals$tibbletest[row, 3])
       }
     } else {
-      row <- as.integer(which(vals$tibbletest[,1] == vals$target[[1]][word]))
+      row <- as.integer(which(vals$tibbletest[,1] == vals$target[word]))
       if(length(row) > 0) {  # if input word is found in data base 
-        target = vals$target[[1]][word]
-        prod = vals$prod[[1]][word]
+        target = vals$target[word]
+        prod = vals$prod[word]
         wf = as.double(vals$tibbletest[row, 3])
       }
     }
-    print(target)
-    print(prod)
-    print(wf)
     # perform calculations on target and production
     target_wcm <- calculateWCM(vals, target)
     prod_wcm <- calculateWCM(vals, prod)

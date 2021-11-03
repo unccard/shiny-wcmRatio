@@ -40,6 +40,7 @@ server <- function(input, output) {
     vals$target <- cleanSample(input$target)
     vals$prod <- cleanSample(input$production)
     vals$isMarked <- input$isMarked
+    print(vals$target)
     
     # perform calculations and store in outputs
     vals$word_by_word <- updateWordByWord(vals)
