@@ -4,7 +4,7 @@ source("functions.R")
 
 ui <- fluidPage(
   # App title 
-  headerPanel("Word Complexity Measure"),
+  headerPanel("Word Complexity Measure Ratio"),
   
   # Sidebar panel with inputs 
   sidebarPanel(
@@ -39,6 +39,7 @@ server <- function(input, output) {
     # store inputs in reactive 
     vals$target <- cleanSample(input$target)
     vals$prod <- cleanSample(input$production)
+    print(cleanSample)
     vals$isMarked <- input$isMarked
     print(vals$target)
     

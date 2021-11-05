@@ -1,9 +1,10 @@
 cleanSample <- function(sample) {
-  sample <- gsub('[?!.<>#$%&*()] ',' ',tolower(sample))  # strip special characters and use lowercase
   split <- strsplit(sample, "[ ?\r?\n]")
   sample_clean <- c()
-  for(word in 1:length(split[[1]])) {  # remove empty values from sample 
-    if(split[[1]][word] != "") sample_clean <- append(sample_clean, split[[1]][word])
+  # remove empty strings and punctuation
+  for(i in 1:length(split[[1]])) {
+    if(split[[1]][i] == "") next  
+    sample_clean <- append(sample_clean, gsub("[!?.<>#$%&*()] ",'', split[[1]][i]))
   }
   return(sample_clean)
 }
