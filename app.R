@@ -17,8 +17,22 @@ ui <- fluidPage(
   # Main panel with outputs
   mainPanel(
     DT::dataTableOutput("word_by_word", "auto", "auto"), 
-    DT::dataTableOutput("average", "auto", "auto")
-  )
+    DT::dataTableOutput("average", "auto", "auto"), 
+  ), 
+  
+  HTML("<hr>"), 
+  
+  div(
+    class = "footer", 
+    titlePanel("Notes:"),
+    tags$ul(
+      tags$li("Your input may be separated by space or newline characters."), 
+      tags$li("To mark syllables and stress, use - as the syllable boundary and ˈ to mark primary stress."), 
+      tags$li("This app does not save data between calculations. Be sure to use the download buttons if you need to save your data."), 
+      tags$li("For more information on WCM, Zipf Frequency, and our database, refer to our GitHub.")
+    )
+  ),
+
 )
 
 server <- function(input, output) {
