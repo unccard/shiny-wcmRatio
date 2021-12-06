@@ -53,9 +53,8 @@ server <- function(input, output) {
     # store inputs in reactive 
     vals$target <- cleanSample(input$target)
     vals$prod <- cleanSample(input$production)
-    print(cleanSample)
     vals$isMarked <- input$isMarked
-    print(vals$target)
+    print(vals$isMarked)
     
     # perform calculations and store in outputs
     vals$word_by_word <- updateWordByWord(vals)
