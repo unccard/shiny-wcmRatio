@@ -93,12 +93,11 @@ updateWordByWord <- function(vals) {
   for(word in 1:length(vals$target)){
     target <- prod <- ""
     target_wcm <- prod_wcm <- wf <- 0
-    str <- paste("^", vals$target[word], "$", sep="")
-    print(str)
+    str <- vals$target[word]
     
     if(vals$isMarked == FALSE) {  # if input does not contain syllables and stress
       #row <- as.integer(which(vals$tibbletest[,2] == vals$target[word]))
-      row <- vals$tibbletest[ ,grep(str, vals$tibbletest[,2])]
+      row <- grep(str, vals$tibbletest[,2])
       print("row")
       print(row)
       if(length(row) > 0) {  # if input word is found in data base
@@ -112,7 +111,7 @@ updateWordByWord <- function(vals) {
       }
     } else {
       #row <- as.integer(which(vals$tibbletest[,1] == vals$target[word]))
-      row <- vals$tibbletest[ ,grep(str, vals$tibbletest[,1])]
+      row <- grep(str, vals$tibbletest[,1])
       if(length(row) > 0) {  # if input word is found in data base 
         target = vals$target[word]
         prod = vals$prod[word]
@@ -122,6 +121,8 @@ updateWordByWord <- function(vals) {
     # perform calculations on target and production
     target_wcm <- calculateWCM(vals, target)
     prod_wcm <- calculateWCM(vals, prod)
+    wcm_ratio <- 0
+    if(target_wcm > 0) wcm_ratio = prod_wcm/target_wcm
     lev_dist <- adist(target, prod)
     target_segments <- nchar(removeMarkers(target))
     phonemic_error_rate <- lev_dist/target_segments
@@ -131,7 +132,7 @@ updateWordByWord <- function(vals) {
     vals$word_by_word[vals$wbw_row, 2] = prod
     vals$word_by_word[vals$wbw_row, 3] = target_wcm
     vals$word_by_word[vals$wbw_row, 4] = prod_wcm
-    vals$word_by_word[vals$wbw_row, 5] = prod_wcm/target_wcm 
+    vals$word_by_word[vals$wbw_row, 5] = wcm_ratio 
     vals$word_by_word[vals$wbw_row, 6] = phonemic_error_rate
     vals$word_by_word[vals$wbw_row, 7] = 1 - phonemic_error_rate
     vals$word_by_word[vals$wbw_row, 8] = wf
