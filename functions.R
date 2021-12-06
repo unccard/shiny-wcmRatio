@@ -93,11 +93,12 @@ updateWordByWord <- function(vals) {
   for(word in 1:length(vals$target)){
     target <- prod <- ""
     target_wcm <- prod_wcm <- wf <- 0
-    str <- paste("^", vals$target[word], "$")
+    str <- paste("^", vals$target[word], "$", sep="")
+    print(str)
     
     if(vals$isMarked == FALSE) {  # if input does not contain syllables and stress
       #row <- as.integer(which(vals$tibbletest[,2] == vals$target[word]))
-      row <- grep(str, vals$tibbletest$word_db$KlatteseBare)
+      row <- vals$tibbletest[ ,grep(str, vals$tibbletest[,2])]
       print("row")
       print(row)
       if(length(row) > 0) {  # if input word is found in data base
@@ -111,7 +112,7 @@ updateWordByWord <- function(vals) {
       }
     } else {
       #row <- as.integer(which(vals$tibbletest[,1] == vals$target[word]))
-      row <- grep(str, vals$tibbletest$word_db$KlatteseSyll)
+      row <- vals$tibbletest[ ,grep(str, vals$tibbletest[,1])]
       if(length(row) > 0) {  # if input word is found in data base 
         target = vals$target[word]
         prod = vals$prod[word]
