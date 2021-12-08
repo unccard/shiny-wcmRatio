@@ -113,6 +113,7 @@ updateWordByWord <- function(vals) {
     prod_wcm <- calculateWCM(vals, prod)
     wcm_ratio <- 0
     if(target_wcm > 0) wcm_ratio = prod_wcm/target_wcm
+    if(target_wcm == 0 && prod_wcm == 0) wcm_ratio = 1
     lev_dist <- adist(target, prod)
     target_segments <- nchar(removeMarkers(target))
     phonemic_error_rate <- lev_dist/target_segments
@@ -132,7 +133,7 @@ updateWordByWord <- function(vals) {
     # add calculations for current word to running total 
     vals$target_total = vals$target_total + target_wcm
     vals$prod_total = vals$prod_total + prod_wcm
-    vals$ratio_total = vals$ratio_total + (prod_wcm/target_wcm)
+    vals$ratio_total = vals$ratio_total + wcm_ratio
     vals$error_total = vals$error_total + phonemic_error_rate 
     vals$accuracy_total = vals$accuracy_total + (1-phonemic_error_rate)
     vals$wf_total = vals$wf_total + wf
