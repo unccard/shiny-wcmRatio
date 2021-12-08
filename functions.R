@@ -91,32 +91,22 @@ updateWordByWord <- function(vals) {
   )  
   
   for(word in 1:length(vals$target)){
-    target <- prod <- ""
+    target <- vals$target[word]
+    prod <- vals$prod[word]
     target_wcm <- prod_wcm <- wf <- 0
     str <- vals$target[word]
     
     if(vals$isMarked == FALSE) {  # if input does not contain syllables and stress
-      #row <- as.integer(which(vals$tibbletest[,2] == vals$target[word]))
-      row <- grep(str, vals$tibbletest[,2])
-      print("row")
-      print(row)
+      row <- as.integer(which(vals$tibbletest[,2] == vals$target[word]))
       if(length(row) > 0) {  # if input word is found in data base
-        target = vals$target[word]
-        prod = vals$prod[word]
-        print("tibble wf")
-        print(vals$tibbletest[row, 3])
-        wf = as.double(vals$tibbletest[row, 3])
-        print("first wf")
+        wf <- as.double(max(vals$tibbletest[row, 3]))  # use max word frequency found
         print(wf)
-      }
-    } else {
-      #row <- as.integer(which(vals$tibbletest[,1] == vals$target[word]))
-      row <- grep(str, vals$tibbletest[,1])
+      } else wf <- 0  # if input not found in db, wf = NA
+    } else {  # input is marked for syllables and stress
+      row <- as.integer(which(vals$tibbletest[,1] == vals$target[word]))
       if(length(row) > 0) {  # if input word is found in data base 
-        target = vals$target[word]
-        prod = vals$prod[word]
-        wf = as.double(vals$tibbletest[row, 3])
-      }
+        wf = as.double(max(vals$tibbletest[row, 3]))  # use max word frequency found
+      }  else wf <- 0  # if input not found in db, wf = NA
     }
     # perform calculations on target and production
     target_wcm <- calculateWCM(vals, target)
@@ -141,20 +131,11 @@ updateWordByWord <- function(vals) {
     
     # add calculations for current word to running total 
     vals$target_total = vals$target_total + target_wcm
-    print("target total")
     vals$prod_total = vals$prod_total + prod_wcm
-    print("prod total")
     vals$ratio_total = vals$ratio_total + (prod_wcm/target_wcm)
-    print("ratio total")
     vals$error_total = vals$error_total + phonemic_error_rate 
-    print("error total")
-    print(vals$error_total)
     vals$accuracy_total = vals$accuracy_total + (1-phonemic_error_rate)
-    print("accuracy total")
-    print(vals$accuracy_total)
     vals$wf_total = vals$wf_total + wf
-    print("wf total")
-    print(vals$wf_total)
   }
   return(vals$word_by_word)
 }
@@ -169,28 +150,14 @@ updateAverage <- function(vals) {
     Avg_WF = NA
   )
   rows <- nrow(vals$word_by_word)  # total occurrences in wbw db 
-  print("rows")
-  print(rows)
   if(rows > 0) {  
     # store calculations in average output
     vals$avg_data[1,1] = vals$target_total/rows
-    print("target avg")
-    print(vals$target_total/rows)
     vals$avg_data[1,2] = vals$prod_total/rows
-    print("prod avg")
-    print(vals$prod_total/rows)
     vals$avg_data[1,3] = vals$ratio_total/rows
-    print("ratio avg")
-    print(vals$ratio_total/rows)
     vals$avg_data[1,4] = vals$error_total/rows
-    print("avg error")
-    print(vals$error_total/rows)
     vals$avg_data[1,5] = vals$accuracy_total/rows
-    print("avg accuracy")
-    print(vals$accuracy_total/rows)
     vals$avg_data[1,6] = vals$wf_total/rows
-    print("avg wf")
-    print(vals$wf_total/rows)
   }
   return(vals$avg_data)
 }
