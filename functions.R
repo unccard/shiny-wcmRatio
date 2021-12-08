@@ -121,12 +121,12 @@ updateWordByWord <- function(vals) {
     # store calculations in word by word output 
     vals$word_by_word[vals$wbw_row, 1] = target
     vals$word_by_word[vals$wbw_row, 2] = prod
-    vals$word_by_word[vals$wbw_row, 3] = target_wcm
-    vals$word_by_word[vals$wbw_row, 4] = prod_wcm
-    vals$word_by_word[vals$wbw_row, 5] = wcm_ratio 
-    vals$word_by_word[vals$wbw_row, 6] = phonemic_error_rate
-    vals$word_by_word[vals$wbw_row, 7] = 1 - phonemic_error_rate
-    vals$word_by_word[vals$wbw_row, 8] = wf
+    vals$word_by_word[vals$wbw_row, 3] = toString(target_wcm)
+    vals$word_by_word[vals$wbw_row, 4] = toString(prod_wcm)
+    vals$word_by_word[vals$wbw_row, 5] = toString(round(wcm_ratio, 3)) 
+    vals$word_by_word[vals$wbw_row, 6] = toString(round(phonemic_error_rate, 3))
+    vals$word_by_word[vals$wbw_row, 7] = toString(round(1 - phonemic_error_rate, 3))
+    vals$word_by_word[vals$wbw_row, 8] = toString(round(wf, 3))
     
     vals$wbw_row = vals$wbw_row + 1  # move to next row in wbw db 
     
@@ -153,12 +153,12 @@ updateAverage <- function(vals) {
   rows <- nrow(vals$word_by_word)  # total occurrences in wbw db 
   if(rows > 0) {  
     # store calculations in average output
-    vals$avg_data[1,1] = vals$target_total/rows
-    vals$avg_data[1,2] = vals$prod_total/rows
-    vals$avg_data[1,3] = vals$ratio_total/rows
-    vals$avg_data[1,4] = vals$error_total/rows
-    vals$avg_data[1,5] = vals$accuracy_total/rows
-    vals$avg_data[1,6] = vals$wf_total/rows
+    vals$avg_data[1,1] = toString(round(vals$target_total/rows, 3))
+    vals$avg_data[1,2] = toString(round(vals$prod_total/rows, 3))
+    vals$avg_data[1,3] = toString(round(vals$ratio_total/rows, 3))
+    vals$avg_data[1,4] = toString(round(vals$error_total/rows, 3))
+    vals$avg_data[1,5] = toString(round(vals$accuracy_total/rows, 3))
+    vals$avg_data[1,6] = toString(round(vals$wf_total/rows, 3))
   }
   return(vals$avg_data)
 }
