@@ -58,7 +58,7 @@ calculateWCM<- function(vals, klattese) {
       }
     }
     
-    if (syllables >= 2) phon_points=phon_points+1  # word patterns (1)
+    if (syllables > 2) phon_points=phon_points+1  # word patterns (1)
     if (nonInitPrimStress == 1) phon_points=phon_points+1  # word patterns (2)
   }
   
