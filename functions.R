@@ -101,7 +101,10 @@ updateWordByWord <- function(vals) {
     str <- vals$target[word]
     
     if(vals$isMarked == FALSE) {  # if input does not contain syllables and stress
-      row <- as.integer(which(vals$tibbletest[,2] == vals$target[word]))
+      print(target)
+      target <- removeMarkers(target)  # remove markers for error forgiveness
+      print(target)
+      row <- as.integer(which(vals$tibbletest[,2] == target))
       if(length(row) > 0) {  # if input word is found in data base
         wf <- as.double(max(vals$tibbletest[row, 3]))  # use max word frequency found
       } else wf <- 0  # if input not found in db, wf = NA
