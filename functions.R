@@ -1,10 +1,14 @@
 cleanSample <- function(sample) {
-  split <- strsplit(sample, "[ ?\r?\n]")
+  split <- strsplit(sample, "[ ?\r?\n]")  # split on spaces or newlines
   sample_clean <- c()
-  # remove empty strings and punctuation
+  # remove empty strings and punctuation, format stress markers
   for(i in 1:length(split[[1]])) {
-    if(split[[1]][i] == "") next  
-    sample_clean <- append(sample_clean, gsub("[!?.<>#$%&*()] ",'', split[[1]][i]))
+    word = split[[1]][i]
+    if(word == "") next  # skip any strings that are empty due to splitting on space
+    if(grepl("'", word, fixed=TRUE) == TRUE) {  # If apostrophe was used as stress marker in input
+      word <- gsub("'", "ˈ", word)  # Replace it with true klattese stress marker 
+    }
+    sample_clean <- append(sample_clean, gsub("[!?.<>#$%&*()] ",'', word))
   }
   return(sample_clean)
 }
@@ -100,7 +104,6 @@ updateWordByWord <- function(vals) {
       row <- as.integer(which(vals$tibbletest[,2] == vals$target[word]))
       if(length(row) > 0) {  # if input word is found in data base
         wf <- as.double(max(vals$tibbletest[row, 3]))  # use max word frequency found
-        print(wf)
       } else wf <- 0  # if input not found in db, wf = NA
     } else {  # input is marked for syllables and stress
       row <- as.integer(which(vals$tibbletest[,1] == vals$target[word]))
