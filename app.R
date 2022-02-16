@@ -37,7 +37,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   vals <- reactiveValues()  # stores values that will be updated and accessed throughout app
-  word_db <- read.csv('UNCWordDB-2021-10-08.csv', na.strings=c("", "NA"))
+  word_db <- read.csv('UNCWordDB-2022-02-07.csv', na.strings=c("", "NA"))
   vals$tibbletest <- tibble(word_db$KlatteseSyll, word_db$KlatteseBare, word_db$Zipf.value) # isolate the categories we need from word_db
   
   observeEvent(input$submit, {
