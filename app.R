@@ -30,7 +30,8 @@ ui <- fluidPage(
       tags$li("Your input may be separated by space or newline characters."), 
       tags$li("To mark syllables and stress, use - as the syllable boundary and ˈ or ' to mark primary stress."), 
       tags$li("This app does not save data between calculations. Be sure to use the download buttons if you need to save your data."), 
-      tags$li("For more information on WCM, Zipf Frequency, and our database, refer to our GitHub.")
+      tags$li("For more information on WCM, Zipf Frequency, and our database, refer to our <a href=\"https://github.com/unccard/shiny-woRdcomplex-2.1\">GitHub</a>.")
+      
     )
   ),
 
