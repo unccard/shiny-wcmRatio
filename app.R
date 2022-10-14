@@ -17,7 +17,10 @@ ui <- fluidPage(
   # Main panel with outputs
   mainPanel(
     DT::dataTableOutput("word_by_word", "auto", "auto"), 
+    downloadButton("downloadWBW", "Download"), 
+    HTML("<hr>"),
     DT::dataTableOutput("average", "auto", "auto"), 
+    downloadButton("downloadAVG", "Download"),
   ), 
   
   HTML("<hr>"), 
@@ -62,7 +65,8 @@ server <- function(input, output) {
     # perform calculations and store in outputs
     vals$word_by_word <- updateWordByWord(vals)
     vals$avg_data <- updateAverage(vals)
-    
+  
+    if(nrow(vals$word_by_word) > 0) {  
     # display the word by word output
     output$word_by_word <- DT::renderDataTable(
       vals$word_by_word, caption = "Word by Word",
@@ -74,6 +78,28 @@ server <- function(input, output) {
       vals$avg_data, caption = "Average",
       server = TRUE
     )
+    
+    output$downloadWBW <- downloadHandler(
+      filename = function(){
+        "word_by_word.csv"
+      },
+      content = function(file) {
+        write.csv(vals$word_by_word,file)
+      }
+    )
+    
+    output$downloadAVG <- downloadHandler(
+      filename = function() {
+        "avg_data.csv"
+      },
+      content = function(file) {
+        write.csv(vals$avg_data, file)
+      }
+    )
+    } else {
+      output$word_by_word <- renderText("No table to display")
+    }
+    
   })
 }
 
