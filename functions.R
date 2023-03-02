@@ -1,5 +1,5 @@
-cleanSample <- function(sample) {
-  split <- strsplit(sample, "[ ?\r?\n]")  # split on spaces or newlines
+cleanSample <- function(sample) {  
+ split <- strsplit(sample, "[ ?\r?\n]")  # split on spaces or newlines
   sample_clean <- c()
   # remove empty strings and punctuation, format stress markers
   for(i in 1:length(split[[1]])) {
@@ -22,7 +22,9 @@ calculateWCM<- function(vals, klattese) {
   engl_affricates <- c("C","J")
   engl_velars <- c("k","g","G")
   engl_liquids <- c("l","L","r","R","X")
+  engl_vowels <- c("i","I","E","e","@","a","W","Y","^","c","O","o","U","u","R","x","|","X","L","M","N","R")
   
+  vowels <- 0
   phon_points <- 0 
   syllables <- 1
   nonInitPrimStress <- 0
@@ -40,7 +42,14 @@ calculateWCM<- function(vals, klattese) {
     if(vals$isMarked == TRUE) {
       if(phoneme == '-') syllables=syllables+1
       if(phoneme == 'ˈ' && syllables >= 2) nonInitPrimStress = 1
+    } 
+
+    # added this to allow syllable count without syllable marking
+    else  { # if not marked
+      if(phoneme %in% engl_vowels) vowels = vowels + 1
+      
     }
+    
     # WCM rules for sound classes 
     if (phoneme %in% engl_velars) phon_points=phon_points+1  # sound classes (1)
     if (phoneme %in% engl_liquids) phon_points=phon_points+1  # sound classes (2)
@@ -52,18 +61,23 @@ calculateWCM<- function(vals, klattese) {
     }
   }
   
-  # if marked, add points for clusters, polysyll, and non-initial primary stress 
-  if(vals$isMarked == TRUE) {
-    # if the word has consonant clusters 
+    # add points for if the word has consonant clusters 
     split <- strsplit(klattese, "([iIEe@aWY^cOoUuRx|XLMNR\\ˈ]+|-+)+")  # regular expression to isolate consonants 
     for(i in 1:length(split[[1]])) {
       if(nchar(split[[1]][i]) > 1) { 
         phon_points = phon_points + 1  # syllable structures (2)
       }
     }
+
+    # if marked, add points for polysyll, and non-initial primary stress 
     
+  if(vals$isMarked == TRUE) {
+        
     if (syllables > 2) phon_points=phon_points+1  # word patterns (1)
     if (nonInitPrimStress == 1) phon_points=phon_points+1  # word patterns (2)
+  } else { #if not marked, add points for syllables based on numvowels >2
+    
+    if(vowels > 2) phon_points = phon_points + 1  # word patterns (1)
   }
   
   return(phon_points) 

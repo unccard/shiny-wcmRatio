@@ -1,5 +1,6 @@
 library(shiny)
 library(tidyr)
+library(stringr)
 source("functions.R")
 
 ui <- fluidPage(
