@@ -1,0 +1,13 @@
+name: shiny-wcmRatio
+title: shiny-wcmRatio
+username:
+account: unccard
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5321328
+bundleId: 6908232
+url: https://unccard.shinyapps.io/shiny-wcmRatio/
+when: 1677785127.13943
+lastSyncTime: 1677785127.13944
+asMultiple: FALSE
+asStatic: FALSE
