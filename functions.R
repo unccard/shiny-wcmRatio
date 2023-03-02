@@ -116,9 +116,11 @@ updateWordByWord <- function(vals) {
     
     if(vals$isMarked == FALSE) {  # if input does not contain syllables and stress
       print(target)
-      target <- removeMarkers(target)  # remove markers for error forgiveness
-      print(target)
-      row <- as.integer(which(vals$tibbletest[,2] == target))
+      #target <- removeMarkers(target)  # remove markers for error forgiveness
+      target_plain <- removeMarkers(target)  # remove markers for error forgiveness
+      print(target_plain)
+      #row <- as.integer(which(vals$tibbletest[,2] == target))
+      row <- as.integer(which(vals$tibbletest[,2] == target_plain))
       if(length(row) > 0) {  # if input word is found in data base
         wf <- as.double(max(vals$tibbletest[row, 3]))  # use max word frequency found
       } else wf <- 0  # if input not found in db, wf = NA
