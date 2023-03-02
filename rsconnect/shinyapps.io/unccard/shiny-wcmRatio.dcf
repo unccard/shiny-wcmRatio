@@ -5,9 +5,9 @@ account: unccard
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5321328
-bundleId: 6908232
+bundleId: 6909046
 url: https://unccard.shinyapps.io/shiny-wcmRatio/
-when: 1677785127.13943
-lastSyncTime: 1677785127.13944
+when: 1677797340.48245
+lastSyncTime: 1677797340.48247
 asMultiple: FALSE
 asStatic: FALSE

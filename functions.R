@@ -62,7 +62,7 @@ calculateWCM<- function(vals, klattese) {
   }
   
     # add points for if the word has consonant clusters 
-    split <- strsplit(klattese, "([iIEe@aWY^cOoUuRx|XLMNR\\ˈ]+|-+)+")  # regular expression to isolate consonants 
+    split <- strsplit(klattese, "([iIEe@aWY^cOoUuRx|XLMNR\\ˈˌˌ]+|-+)+")  # regular expression to isolate consonants 
     for(i in 1:length(split[[1]])) {
       if(nchar(split[[1]][i]) > 1) { 
         phon_points = phon_points + 1  # syllable structures (2)
